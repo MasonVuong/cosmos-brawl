@@ -26,17 +26,24 @@ all_sprites = pg.sprite.Group()
 alien = Alien()
 all_sprites.add(alien)
 
+background = pg.image.load("assets/sprites/stages/geisel_stage.png")
+
 run = True
 while run:
     for e in pg.event.get():
         if e.type == pg.QUIT:
             run = False
+        if e.type == pg.KEYDOWN:
+            alien.handle_input(e)
 
     # This ticks the alien's update() loop, which runs the current state's logic
     all_sprites.update()
     
     canvas.fill((255, 255, 255))
+    canvas.blit(background, (0, 0))
     all_sprites.draw(canvas)
+    if alien.projectile != None:
+        canvas.blit(alien.projectile.image, alien.projectile.rect)
 
     scaled_canvas = pg.transform.scale(canvas, (SCALE_WIDTH, SCALE_HEIGHT))
     window.blit(scaled_canvas, (DESTINATION_X, DESTINATION_Y))
